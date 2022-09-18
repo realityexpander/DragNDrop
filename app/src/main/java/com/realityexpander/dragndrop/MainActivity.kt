@@ -2,9 +2,7 @@ package com.realityexpander.dragndrop
 
 import android.content.ClipData
 import android.content.ClipDescription
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Point
+import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -64,19 +63,24 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onDrawShadow(canvas: Canvas) {
+
                     canvas.scale(
                         view.scaleX,
                         view.scaleY,
                         (width / 2).toFloat(),
                         (height / 2).toFloat()
                     );
-                    canvas.rotate(view.rotation + rotationAnim, (width / 2).toFloat(), (height / 2).toFloat());
+                    canvas.rotate(view.rotation , (width / 2).toFloat(), (height / 2).toFloat());
                     canvas.translate(
                         ((width - view.width) / 2).toFloat(),
                         ((height - view.height) / 2).toFloat()
                     )
 
-                    super.onDrawShadow(canvas) // note: the call to super is last
+                    val d = ResourcesCompat.getDrawable(resources, R.mipmap.ic_launcher, null)
+                    d?.setBounds(0, 0, width, height)
+                    d?.draw(canvas)
+
+                    //super.onDrawShadow(canvas) // note: the call to super is last (draws the view)
                 }
             }
 
@@ -88,7 +92,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    var rotationAnim = 0f
     var oldColor: Int = Color.WHITE
 
     // view is the item that is being "dropped" on
