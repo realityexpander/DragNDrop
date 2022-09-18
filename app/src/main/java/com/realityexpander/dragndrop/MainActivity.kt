@@ -15,6 +15,9 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,8 +45,8 @@ class MainActivity : AppCompatActivity() {
             val rotationRad = Math.toRadians(view.rotation.toDouble())
             val w = (view.width * view.scaleX).toInt()
             val h = (view.height * view.scaleY).toInt()
-            val s = Math.abs(Math.sin(rotationRad))
-            val c = Math.abs(Math.cos(rotationRad))
+            val s = abs(sin(rotationRad))
+            val c = abs(cos(rotationRad))
             val width = (w * c + h * s).toInt()
             val height = (w * s + h * c).toInt()
 
@@ -56,14 +59,11 @@ class MainActivity : AppCompatActivity() {
 
                     shadowSize.set(width, height)
                     shadowTouchPoint.set(shadowSize.x / 2, shadowSize.y / 2)
+
+                    // note: no call to super
                 }
 
                 override fun onDrawShadow(canvas: Canvas) {
-//                    super.onDrawShadow(canvas)
-//                    canvas.drawColor(Color.RED)
-
-                    println("onDrawShadow")
-
                     canvas.scale(
                         view.scaleX,
                         view.scaleY,
@@ -74,8 +74,9 @@ class MainActivity : AppCompatActivity() {
                     canvas.translate(
                         ((width - view.width) / 2).toFloat(),
                         ((height - view.height) / 2).toFloat()
-                    );
-                    super.onDrawShadow(canvas);
+                    )
+
+                    super.onDrawShadow(canvas) // note: the call to super is last
                 }
             }
 
